@@ -65,9 +65,11 @@ void sendstatus()
 // wire       viking_en = system_ctrl[28];
 // wire [8:0] acsi_enable = system_ctrl[17:10];
 
+// 00000000000000001111111111111111
+// 0123456789ABCDEF0123456789ABCDEF
+// 0123456789ABCDEFGHIJKLMNOPQRSTUV
 
 char *configstring="Atari ST;;"
-	"S0U,ST ,Floppy A:;"
 	"P1,Storage;"
 	"P1S0U,ST ,Floppy A:;"
 	"P1S1U,ST ,Floppy B:;"
@@ -88,6 +90,7 @@ char *configstring="Atari ST;;"
 	"P3OKL,Scanlines,Off,25%,50%,75%;"
 	"P3OT,Composite blend,Off,On;"
 	"P3OM,Stereo sound,Off,On;"
+	"P3OU,Steinberg dongle,Off,On;"
 	"SC,CFG,Load config;"
 	"SD,CFG,Save config;"
 	"T0,Reset (Hold for hard reset);"

@@ -41,4 +41,6 @@ set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) ../ikbd
 set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) ../ikbd/hd63701/HD63701_CORE.v ]
 set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) ../ikbd/hd63701/HD63701_ALU.v ]
 set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) ../ikbd/rom/MCU_BIROM.v ]
+set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) cubase2_dongle.v ]
+set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) cubase3_dongle.v ]
 
