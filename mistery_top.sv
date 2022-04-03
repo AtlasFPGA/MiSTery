@@ -31,8 +31,10 @@ module mistery_top (
 	// AUDIO
 	output wire           AUDIO_L,    // sigma-delta DAC output left
 	output wire           AUDIO_R,    // sigma-delta DAC output right
-	output wire [14:0]    DAC_L,      // DAC output left
-	output wire [14:0]    DAC_R,      // DAC output right
+	output wire [15:0]    DAC_L,      // DAC output left
+	output wire [15:0]    DAC_R,      // DAC output right
+	input  wire [15:0]    DAC_MIDI_L, // MIDI DAC input left
+	input  wire [15:0]    DAC_MIDI_R, // MIDI DAC input right
 
 	// SPI
 	input wire            SPI_DO_IN,
@@ -152,20 +154,40 @@ mist_video #(.OSD_COLOR(3'b010), .COLOR_DEPTH(4), .SD_HCNT_WIDTH(10), .OSD_X_OFF
 );
 
 /* ------------------------------------------------------------------------------ */
-/* ------------------------------- Sigma-delta DAC ------------------------------ */
+/* ------------------------------- AUDIO DAC ------------------------------------ */
 /* ------------------------------------------------------------------------------ */
 
-wire [14:0] audio_mix_l, audio_mix_r;
-assign DAC_L = audio_mix_l;
-assign DAC_R = audio_mix_r;
+wire [15:0] audio_mix_l, audio_mix_r;
 
-//sigma_delta_dac sigma_delta_dac (
-//	.clk      ( clk_32      ),      // bus clock
-//	.ldatasum ( audio_mix_l ),      // left channel data
-//	.rdatasum ( audio_mix_r ),      // right channel data
-//	.left     ( AUDIO_L     ),      // left bitstream output
-//	.right    ( AUDIO_R     )       // right bitsteam output
-//);
+
+reg [15:0] aud_l, aud_r;
+always @(posedge clk_32) begin
+	reg [15:0] old_l0, old_l1, old_r0, old_r1;
+	
+	old_l0 <= audio_mix_l;
+	old_l1 <= old_l0;
+	if(old_l0 == old_l1) aud_l <= old_l1;
+
+	old_r0 <= audio_mix_r;
+	old_r1 <= old_r0;
+	if(old_r0 == old_r1) aud_r <= old_r1;
+end
+
+reg [15:0] out_l, out_r;
+always @(posedge clk_32) begin
+	reg [16:0] tmp_l, tmp_r;
+
+	tmp_l <= {2'b00, aud_l[15:1]} +  {DAC_MIDI_L[15],DAC_MIDI_L};
+	tmp_r <= {2'b00, aud_r[15:1]} +  {DAC_MIDI_R[15],DAC_MIDI_R};
+
+	// clamp the output
+	out_l <= (^tmp_l[16:15]) ? {tmp_l[16], {15{tmp_l[15]}}} : tmp_l[15:0];
+	out_r <= (^tmp_r[16:15]) ? {tmp_r[16], {15{tmp_r[15]}}} : tmp_r[15:0];
+end
+
+assign DAC_L = out_l;
+assign DAC_R = out_r;
+
 
 /* ------------------------------------------------------------------------------ */
 /* ------------------------------- MIDO output FIFO ----------------------------- */

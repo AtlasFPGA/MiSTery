@@ -23,9 +23,9 @@ entity neptuno_top is
 		DRAM_RAS_N		:	 OUT STD_LOGIC;
 		VGA_HS		:	 OUT STD_LOGIC;
 		VGA_VS		:	 OUT STD_LOGIC;
-		VGA_R		:	 OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-		VGA_G		:	 OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-		VGA_B		:	 OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+		VGA_R		:	 OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+		VGA_G		:	 OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
+		VGA_B		:	 OUT STD_LOGIC_VECTOR(5 DOWNTO 0);
 		-- AUDIO
 		SIGMA_R                     : OUT STD_LOGIC;
 		SIGMA_L                     : OUT STD_LOGIC;
@@ -127,12 +127,10 @@ architecture RTL of neptuno_top is
 	signal joyc : std_logic_vector(7 downto 0);
 	signal joyd : std_logic_vector(7 downto 0);
 
-   signal  DAC_L : signed(14 downto 0);
-	signal  DAC_R : signed(14 downto 0);
-   signal  MIDI_DAC_L : signed(15 downto 0);
-	signal  MIDI_DAC_R : signed(15 downto 0);
-	signal  MIX_L : signed(15 downto 0);
-	signal  MIX_R : signed(15 downto 0);
+   signal  DAC_L : signed(15 downto 0);
+	signal  DAC_R : signed(15 downto 0);
+   signal  DAC_MIDI_L : signed(15 downto 0);
+	signal  DAC_MIDI_R : signed(15 downto 0);
    
 	
 
@@ -229,9 +227,9 @@ joyb<="11" & joy2fire2 & joy2fire1 & joy2right & joy2left & joy2down & joy2up;
 stm_rst_o <= '0';
 
 
-VGA_R<=vga_red(7 downto 3);
-VGA_G<=vga_green(7 downto 3);
-VGA_B<=vga_blue(7 downto 3);
+VGA_R<=vga_red(7 downto 2);
+VGA_G<=vga_green(7 downto 2);
+VGA_B<=vga_blue(7 downto 2);
 VGA_HS<=vga_hsync;
 VGA_VS<=vga_vsync;
 
@@ -246,7 +244,7 @@ port map
 (       
    clock_i  => clock_50_i,
    reset_i  => '0',
-   dac_i    => MIX_L,
+   dac_i    => DAC_L,
    dac_o    => SIGMA_L
 );
 
@@ -259,7 +257,7 @@ port map
 (       
    clock_i  => clock_50_i,
    reset_i  => '0',
-   dac_i    => MIX_R,
+   dac_i    => DAC_R,
    dac_o    => SIGMA_R
 );
 
@@ -270,12 +268,10 @@ port map(
 	dac_LRCK  => I2S_LRCLK,
 	dac_SCLK  => I2S_BCLK,
 	dac_SDIN  => I2S_DATA,
-	L_data    => std_logic_vector(MIX_L),
-	R_data    => std_logic_vector(MIX_R)
+	L_data    => std_logic_vector(DAC_L),
+	R_data    => std_logic_vector(DAC_R)
 );		
 
-MIX_L <= MIDI_DAC_L + DAC_L;
-MIX_R <= MIDI_DAC_R + DAC_R;
 
 
 midi_module: i2s_decoder
@@ -284,8 +280,8 @@ port map(
 	 sck      => MIDI_CLKBD,
 	 ws       => MIDI_WSBD,
 	 sd       => MIDI_DABD,
-	 left_out => MIDI_DAC_L,
-	 right_out=> MIDI_DAC_R
+	 left_out => DAC_MIDI_L,
+	 right_out=> DAC_MIDI_R
 );
 
 	-- JOYSTICKS
@@ -347,9 +343,11 @@ guest: COMPONENT  mistery_top
 		VGA_B => vga_blue(7 downto 2),
 		--AUDIO_L => SIGMA_L,
 		--AUDIO_R => SIGMA_R,
-		LED     => LED,
-		DAC_L   => DAC_L,
-		DAC_R   => DAC_R,
+		LED       => LED,
+		DAC_L     => DAC_L,
+		DAC_R     => DAC_R,
+		DAC_MIDI_L=> DAC_MIDI_L,
+		DAC_MIDI_R=> DAC_MIDI_R,
 		PS2K_CLK => ps2_keyboard_clk_in or intercept, -- Block keyboard when OSD is active
 		PS2K_DAT => ps2_keyboard_dat_in,
 		PS2M_CLK => ps2_mouse_clk_in,

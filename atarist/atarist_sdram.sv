@@ -29,8 +29,8 @@ module atarist_sdram (
 	output wire          viking_vs,
 
 	// Sound output
-	output wire    [14:0] audio_mix_l,
-	output wire    [14:0] audio_mix_r,
+	output wire    [15:0] audio_mix_l,
+	output wire    [15:0] audio_mix_r,
 
 	// MIDI OUT (parallel data)
 	output wire          midi_out_strobe,
@@ -766,17 +766,10 @@ YM2149 #(.MIXER_VOLTABLE(1'b1)) ym2149 (
 
 // This should later be handled by the lmc1992
 
-wire [9:0] ym_audio_out_l_signed = ym_audio_out_l - 10'h200;
-wire [9:0] ym_audio_out_r_signed = ym_audio_out_r - 10'h200;
-wire [7:0] ste_audio_out_l_signed = dma_snd_l - 8'h80;
-wire [7:0] ste_audio_out_r_signed = dma_snd_r - 8'h80;
 
-assign audio_mix_l =
-        { ym_audio_out_l_signed[9], ym_audio_out_l_signed, ym_audio_out_l_signed[9:6]} +
-        { ste_audio_out_l_signed[7], ste_audio_out_l_signed, ste_audio_out_l_signed[7:2] };
-assign audio_mix_r =
-        { ym_audio_out_r_signed[9], ym_audio_out_r_signed, ym_audio_out_r_signed[9:6]} +
-        { ste_audio_out_r_signed[7], ste_audio_out_r_signed, ste_audio_out_r_signed[7:2] };
+assign audio_mix_l = {1'b0, ym_audio_out_l, ym_audio_out_l[9:5]} + {1'b0, dma_snd_l, dma_snd_l[7:1]};
+assign audio_mix_r = {1'b0, ym_audio_out_r, ym_audio_out_r[9:5]} + {1'b0, dma_snd_r, dma_snd_r[7:1]};
+
 
 /* ------------------------------------------------------------------------------ */
 /* ------------------------------ Mega STe control ------------------------------ */

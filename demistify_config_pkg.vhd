@@ -66,8 +66,10 @@ COMPONENT mistery_top
 		UART_RX	:	IN STD_LOGIC := '1';
 		AUDIO_L  : out std_logic;
 		AUDIO_R  : out std_logic;
-		DAC_L		: OUT SIGNED(14 DOWNTO 0);
-		DAC_R		: OUT SIGNED(14 DOWNTO 0);
+		DAC_L		: OUT SIGNED(15 DOWNTO 0);
+		DAC_R		: OUT SIGNED(15 DOWNTO 0);
+		DAC_MIDI_L		: IN SIGNED(15 DOWNTO 0);
+		DAC_MIDI_R		: IN SIGNED(15 DOWNTO 0);
 
 		PS2K_CLK : in std_logic;
 		PS2K_DAT : in std_logic;
