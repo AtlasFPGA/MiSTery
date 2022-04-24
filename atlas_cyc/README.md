@@ -1,20 +1,16 @@
-# xxxxx DeMiSTified - Atlas CYC1000 port
+# MiSTery DeMiSTified - Atlas CYC1000 port
 
-27/11/21 Atlas CYC1000 port DeMiSTified by Somhic from original MiST xxxxxxx https://github.com/mist-devel/xxxxxxxxxxx
-
-27/11/21 DECA port by Somhic from original Demistified MiST core https://github.com/robinsonb5/xxxxx by Alastair M. Robinson.
-
-Special thanks to Alastair M. Robinson creator of [DeMiSTify](https://github.com/robinsonb5/DeMiSTify) for helping me. 
+10/04/22  Atlas CYC1000  port by Somhic from previous Demistifyied MiST core https://github.com/mist-devel/mist-board/wiki by @robinsonb5 and @Rampa069.   
 
 [Read this guide if you want to know how I DeMiSTified this core](https://github.com/DECAfpga/DECA_board/tree/main/Tutorials/DeMiSTify).
 
 **Features:**
 
-* HDMI video output
+* ~~HDMI video output~~
 * VGA 222 video output is available through an HDMI to VGA adapter
-* HDMI audio output
 * Sigma-Delta audio
-* Joystick (tested with a Megadrive gamepad)
+* Mouse
+* Audio (Midi output, I2S output) (MIDI mixing not working yet)
 
 **Additional hardware required**:
 
@@ -22,11 +18,11 @@ Special thanks to Alastair M. Robinson creator of [DeMiSTify](https://github.com
 
 ##### Versions:
 
-v0.x Changes in Mist core to adapt DeMiSTify to both Deca and new board Atlas_cyc
+--
 
 ### STATUS
 
-* HDMI video outputs special resolution so will not work on all monitors. 
+* VGA version only at the moment.
 
 
 
@@ -35,8 +31,8 @@ v0.x Changes in Mist core to adapt DeMiSTify to both Deca and new board Atlas_cy
 (Note that sof/rbf files are already included in /atlas_cyc/output_files/)
 
 ```sh
-git clone https://github.com/DECAfpga/xxxxxx
-cd xxxxx
+git clone https://github.com/AtlasFPGA/MiSTery
+cd MiSTery
 #Do a first make (will finish in error) but it will download missing submodules 
 make
 cd DeMiSTify
@@ -53,7 +49,7 @@ make BOARD=atlas_cyc
 After that you can:
 
 * Flash bitstream directly from [command line](https://github.com/DECAfpga/DECA_binaries#flash-bitstream-to-fgpa-with-quartus)
-* Load project in Quartus from /atlas_cyc/xxxxxxxxx_atlas_cyc.qpf
+* Load project in Quartus from /atlas_cyc/MiSTery_atlas_cyc.qpf
 
 **Others:**
 
