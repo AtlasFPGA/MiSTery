@@ -4,6 +4,8 @@
 
 [Read this guide if you want to know how I DeMiSTified this core](https://github.com/DECAfpga/DECA_board/tree/main/Tutorials/DeMiSTify).
 
+**Included version is for AT1 board (purple), VGA output and USB keyboard.**
+
 **Features:**
 
 * ~~HDMI video output~~
@@ -14,7 +16,7 @@
 
 **Additional hardware required**:
 
-- PS/2 Keyboard 
+- USB Keyboard 
 
 ##### Versions:
 
