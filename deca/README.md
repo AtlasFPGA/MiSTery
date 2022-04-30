@@ -4,34 +4,47 @@
 
 [Read this guide if you want to know how I DeMiSTified this core](https://github.com/DECAfpga/DECA_board/tree/main/Tutorials/DeMiSTify).
 
-**Features for Deca board:**
+**THIS PORT REQUIRES A SDRAM MODULE WITH SEPARATED DQMH/L SIGNALS** (3 pins old MiSTer memory modules should work)
 
-* ~~HDMI video output (special resolution will not work on all LCD monitors)~~
-* VGA 444 video output is available through GPIO (see pinout below). 
-* Audio Line out (3.5 jack green connector) ~~and HDMI audio output~~
-* Joystick available through GPIO  (see pinout below).  **Joystick power pin must be 2.5 V**
-  * **DANGER: Connecting power pin above 2.6 V may damage the FPGA**
+**Now compatible with [Deca Retro Cape 2](https://github.com/somhi/DECA_retro_cape_2)** (new location for 3 pins of old SDRAM modules). Otherwise see pinout below to connect everything through GPIOs.
+
+**Features for Deca board**
+
+* VGA 444 video output is available through GPIO. 
+* Audio I2S Line out (3.5 jack green connector) ~~and HDMI audio output~~
+* MIDI output and MIDI I2S mixing available though an external mt32-pi synthesizer ([MIDI2SBC](https://github.com/somhi/MIDI_I2S_SBC_Pmod_Edge_Interface))
+* Joystick available through GPIO. 
+  * **Joystick power pin must be 2.5 V. DANGER: Connecting power pin above 2.6 V may damage the FPGA**
   * This core was tested with a Megadrive 6 button gamepad. A permanent high level is applied on pin 7 of DB9, so only works buttons B and C.
 
-**Additional hardware required**:
+**Additional hardware required**
 
 - SDRAM module
   - Tested with a dual memory module v1.3 with 3 pins ([see connections](https://github.com/SoCFPGA-learning/DECA/tree/main/Projects/sdram_mister_deca) + [3pins](https://github.com/DECAfpga/DECA_board/blob/main/Sdram_mister_deca/README_3pins.md))
-- PS/2 Keyboard and Mouse connected to GPIO  (see pinout below)
+- PS/2 Keyboard and Mouse connected to GPIO
 
-##### Versions:
+**Optional USB keyboard input**
 
-v0.1 VGA version only. 
+Experimental support for USB low speed keyboards  (old & cheap). A mini USB to USB A female adaptor is needed  to be connected into the USB connector next to HDMI. <u>If not working try disconnecting power and/or program again the board.</u> 
+
+To generate bitstream with USB support edit the  /deca/deca_top.vhd and change the defined variable DECA_KEYB to 2 at the top of the file.
+
+##### Versions
+
+* 220410 VGA version only
+* 220430 USB keyboard optional
 
 ### STATUS
 
-* Working fine
+* Working fine 
 
-* ~~HDMI video outputs special resolution so will not work on all monitors.~~ 
+### Binaries
+
+Fins .sof and .svf binary bitstreams for this core at the corresponding category at https://github.com/DECAfpga/DECA_binaries
+
+Note that .sof/.svf files might also be included in /deca/output_files/
 
 ### Instructions to compile the project for a specific board:
-
-(Note that sof/svf files are already included in /deca/output_files/)
 
 ```sh
 git clone https://github.com/somhi/MiSTery
